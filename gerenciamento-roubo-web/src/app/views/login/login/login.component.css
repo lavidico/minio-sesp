@@ -1,0 +1,198 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+
+.login-container{
+  width: 100%;
+  height: 100vh;
+  background: rgb(153, 188, 254);
+   background: linear-gradient(158deg, rgba(153, 188, 254, 1) 0%, rgba(153, 206, 254, 1) 100%);
+
+  color: #CCD2E3;
+  font-family: 'Roboto', sans;
+}
+
+.form-container {
+    margin-top:250px;
+
+}
+
+.left {
+    padding: 5%;
+    box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.15), 0 9px 26px 0 rgba(0, 0, 0, 0.15);
+    background: #193282;
+    border-radius: 0.4rem;
+    border-radius: 7px 0 0 7px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.left h1 {
+  
+    color: #fff;
+    font-size: 3rem;
+}
+
+.right {
+    color: #333;
+    padding: 5%;
+    /* margin-left:-10px; */
+    background: #ffffff;
+    box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.15), 0 9px 26px 0 rgba(0, 0, 0, 0.15);
+    border-radius: 0 7px 7px 0;
+}
+
+.right h3 {
+    text-align: center;
+    color: #333;
+}
+
+.right span { 
+    font-size: 15px;
+}
+
+.login-container form {
+    padding: 5% 0;
+    text-align: center;
+}
+
+input[type=text],
+input[type=password] {
+    border: 0;
+    border-bottom: 1px solid #ccc;
+    border-radius: 0;
+}
+
+.btnSubmit {
+    width: 70%;
+    border-radius: 7px;
+    padding: 2%;
+    border: none;
+    cursor: pointer;
+    transition: 0.5s;
+    margin: 0;
+    box-shadow: 0 1px 5px 0px rgba(0, 0, 0, 0.15), 0 2px 5px 0px rgba(0, 0, 0, 0.15);
+    font-weight: 600;
+    color: #fff;
+    text-align: center;
+}
+
+.right .login {
+    background-color: #0071BB;
+}
+
+.right .login[disabled] {
+    background-color: #50b2dc;
+}
+
+.social{
+    margin-top:0px;
+    text-align: center;
+}
+
+.right .google{
+    
+    background-color:#D15344;
+    background-image: url('../../../../assets/google.png');
+    background-repeat: no-repeat;
+    background-position: left 10px top 10px;
+    background-size: 22px 22px;
+    
+
+}
+
+.right .btnSubmit:hover{
+    
+    background-color: #193282;
+}
+
+.login-container form input:focus {
+    outline: none;
+}
+
+.form-control:focus {
+    border-color: #6172A6;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.0), 0 0 8px rgba(255, 0, 0, 0.0);
+}
+
+.creditos{
+    color: #193282;
+}
+
+img {
+    margin-right: 10px;
+}
+
+#fabrica {
+    
+    width: 100px;
+    
+}
+
+#ifmt {
+    width : 120px;
+}
+
+#fapemat {
+    width: 180px;
+}
+
+
+
+
+
+@media(min-width: 1280px){
+   
+    .login-container{
+        background: #D0D7DF;
+    }
+}
+
+
+
+@media(max-width:1366px) {
+    .form-container{
+        margin-top: 100px;
+    }
+}
+
+@media(max-width: 900px) {
+  footer {
+    padding-bottom: 10px;
+  }
+    footer img{
+     padding-bottom:  10px;
+    }
+    .login-container{
+        background:white;
+    }
+    .left {
+        border-radius: 7px 7px 0 0;
+    }
+    .right {
+        margin-top: -10px;
+        border-radius: 0 0 7px 7px;
+    }
+}
+
+@media(max-width: 450px) {
+    .login-container {
+        background-color: white;
+    }
+    .form-container{
+        margin-top: 0;
+    }
+    body {
+        margin: 0;
+    }
+    .left {
+        box-shadow: none;
+        border-radius: 0;
+    }
+    .right {
+        box-shadow: none;
+        border-radius: 0;
+    }
+    .form-container {
+        height: auto;
+    }
+}

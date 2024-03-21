@@ -1,0 +1,38 @@
+{
+  "/v1-0/registro-geral": {
+    "target": "http://localhost:8005",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true
+  },
+  "/v1-0/carteira-funcional": {
+    "target": "http://localhost:8001",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true
+  },
+  "/v1-0/gerenciamento-ocorrencia": {
+    "target": "http://localhost:8002",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true
+  },
+  "/v1-0/gerenciamento-patrulha": {
+    "target": "http://localhost:8003",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true
+  },
+  "/v1-0/gerenciamento-procurado": {
+    "target": "http://localhost:8004",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true
+  },
+  "/v1-0/autenticacao": {
+    "target": "http://localhost:8000",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true
+  }
+}

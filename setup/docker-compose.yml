@@ -1,0 +1,209 @@
+version: '3.8'
+services:
+  minio:
+    image: minio/minio
+    command: minio server /data --console-address ":9001" --address ":9002"
+    container_name: minio
+    ports:
+      - '9002:9002'
+      - '9001:9001'
+    volumes:
+      - 'minio-volume:/data'
+    restart: always
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    networks:
+      - sesp-microsservicos
+  db-apps:
+    image: br.gov.mt.sesp/db-apps
+    container_name: db-apps
+    ports:
+      - '35433:5432'
+    volumes:
+      - db-apps-volume:/var/lib/postgresql/data
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: sespmt
+    networks:
+      - sesp-microsservicos
+  ldap:
+    image: br.gov.mt.sesp/ldap
+    container_name: ldap-server
+    command: --copy-service
+    environment:
+      LDAP_ADMIN_PASSWORD: admin
+      LDAP_BASE_DN: dc=mt,dc=gov,dc=br
+      LDAP_DOMAIN: mt.gov.br
+    ports:
+      - 3389:389
+    networks:
+      - sesp-microsservicos
+  ldap-admin:
+    image: osixia/phpldapadmin:0.7.2
+    container_name: ldap-server-admin
+    ports:
+      - 3390:80
+    environment:
+      PHPLDAPADMIN_LDAP_HOSTS: ldap-server
+      PHPLDAPADMIN_HTTPS: 'false'
+    depends_on: 
+      - ldap
+    networks:
+      - sesp-microsservicos
+  db-keycloak:
+    image: br.gov.mt.sesp/db-keycloak
+    container_name: db-keycloak
+    ports:
+      - '35432:5432'
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: keycloak
+    networks:
+      - sesp-microsservicos
+  keycloak:
+    image: br.gov.mt.sesp/keycloak
+    container_name: keycloak
+    ports:
+      - '38080:8080'
+    restart: always
+    environment:
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
+      DB_VENDOR: postgres
+      DB_ADDR: db-keycloak
+      DB_DATABASE: keycloak
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+    networks:
+      - sesp-microsservicos
+    depends_on: 
+      - db-keycloak
+      - db-apps
+      - ldap
+  redis:
+    image: redis:6.0.9
+    container_name: redis
+    ports:
+      - '36379:6379'
+    restart: always
+    networks:
+      - sesp-microsservicos
+  autenticacao:
+    image: br.gov.mt.sesp/autenticacao
+    container_name: autenticacao
+    ports:
+      - '8000:8080'
+    restart: always
+    networks:
+      - sesp-microsservicos
+    depends_on: 
+      - keycloak
+  rabbitmq:
+    image: rabbitmq:3.8.9-management-alpine
+    container_name: rabbitmq
+    ports:
+      - '15672:15672'
+      - '25676:25676'
+      - '35672:5672'
+    restart: always
+    environment: 
+      RABBITMQ_DEFAULT_USER: sespmt
+      RABBITMQ_DEFAULT_PASS: sespmt
+    networks:
+      - sesp-microsservicos
+  carteira-funcional: 
+    image: br.gov.mt.sesp/carteira-funcional
+    container_name: carteira-funcional
+    ports:
+      - '8001:8080'
+    restart: always
+    networks:
+      - sesp-microsservicos
+    depends_on: 
+      - db-apps      
+      - autenticacao
+      - redis      
+      - rabbitmq      
+  gerenciamento-ocorrencia: 
+    image: br.gov.mt.sesp/gerenciamento-ocorrencia
+    container_name: gerenciamento-ocorrencia
+    ports:
+      - '8002:8080'
+    restart: always
+    networks:
+      - sesp-microsservicos
+    depends_on: 
+      - db-apps      
+      - autenticacao
+      - redis      
+      - rabbitmq
+      - minio
+  gerenciamento-patrulha: 
+    image: br.gov.mt.sesp/gerenciamento-patrulha
+    container_name: gerenciamento-patrulha
+    ports:
+      - '8003:8080'
+    restart: always
+    networks:
+      - sesp-microsservicos
+    depends_on: 
+      - db-apps      
+      - autenticacao
+      - redis      
+      - rabbitmq
+  gerenciamento-procurado: 
+    image: br.gov.mt.sesp/gerenciamento-procurado
+    container_name: gerenciamento-procurado
+    ports:
+      - '8004:8080'
+    restart: always
+    networks:
+      - sesp-microsservicos
+    depends_on: 
+      - db-apps          
+      - autenticacao
+      - redis      
+      - rabbitmq
+  registro-geral: 
+    image: br.gov.mt.sesp/registro-geral
+    container_name: registro-geral
+    ports:
+      - '8005:8080'
+    restart: always
+    networks:
+      - sesp-microsservicos
+    depends_on: 
+      - db-apps          
+      - autenticacao
+      - redis
+      - rabbitmq
+  gerenciamento-roubo:
+    image: br.gov.mt.sesp/gerenciamento-roubo-web
+    container_name: gerenciamento-roubo-web
+    ports:
+      - '8006:8080'
+    restart: always
+    networks:
+      - sesp-microsservicos
+    depends_on:
+      - db-apps    
+      - gerenciamento-ocorrencia
+      - gerenciamento-procurado
+      - registro-geral
+      - autenticacao
+      - rabbitmq      
+networks:
+  sesp-microsservicos:
+    driver: bridge
+volumes:
+  minio-volume:
+    external: true
+  db-keycloak-volume:
+    external: true
+  db-apps-volume:
+    external: true

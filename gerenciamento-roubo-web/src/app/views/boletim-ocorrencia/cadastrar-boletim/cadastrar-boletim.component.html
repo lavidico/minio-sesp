@@ -1,0 +1,608 @@
+<app-header></app-header>
+<app-navbar></app-navbar>
+
+<div role="main" class="container pb-5">
+    <div class="row mt-5 mb-4">
+        <h4>Cadastrar novo boletim</h4>
+    </div>
+    <div class="col-12">
+        <form [formGroup]="form">
+            <div class="row mb-3">
+                <div class="col-lg-3">
+                    <label>Data</label>
+                    <input type="date"
+                           class="form-control"
+                           formControlName="dataBo">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-lg">
+                    <input type="text" class="form-control" formControlName="rua" placeholder="Rua"
+                           [ngClass]="[getField('rua').invalid && (getField('rua').dirty || getField('rua').touched) ? 'is-invalid' : '']">
+                    <div class=" mt-3 alert alert-danger"
+                         *ngIf="getField('rua').invalid && (getField('rua').dirty || getField('rua').touched)">
+                        <div [hidden]="!getFieldErros('rua', 'required')">
+                            Esse campo é necessário
+                        </div>
+                        <div [hidden]="!getFieldErros('rua', 'minlength')">
+                            É necessário que tenha pelo
+                            menos {{getFieldErros('rua', 'minlength')?.requiredLength}} caracteres
+                        </div>
+                        <div [hidden]="!getFieldErros('rua', 'maxlength')">
+                            É necessário que tenha no
+                            máximo {{getFieldErros('rua', 'maxlength')?.requiredLength}}
+                            caracteres
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control" formControlName="complemento"
+                           [ngClass]="[getField('complemento').invalid && (getField('complemento').dirty || getField('complemento').touched) ? 'is-invalid' : '']"
+                           placeholder="Complemento">
+                    <div class=" mt-3 alert alert-danger"
+                         *ngIf="getField('complemento').invalid && (getField('complemento').dirty || getField('complemento').touched)">
+                        <div [hidden]="!getFieldErros('complemento', 'required')">
+                            Esse campo é necessário
+                        </div>
+                        <div [hidden]="!getFieldErros('complemento', 'minlength')">
+                            É necessário que tenha pelo
+                            menos {{getFieldErros('complemento', 'minlength')?.requiredLength}}
+                            caracteres
+                        </div>
+                        <div [hidden]="!getFieldErros('complemento', 'maxlength')">
+                            É necessário que tenha no
+                            máximo {{getFieldErros('complemento', 'maxlength')?.requiredLength}}
+                            caracteres
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-lg-2">
+                    <input type="text" class="form-control" formControlName="numero"
+                           placeholder="Número"
+                           [ngClass]="[getField('numero').invalid && (getField('numero').dirty || getField('numero').touched) ? 'is-invalid' : '']">
+                    <div class=" mt-3 alert alert-danger"
+                         *ngIf="getField('numero').invalid && (getField('numero').dirty || getField('numero').touched)">
+                        <div [hidden]="!getFieldErros('numero', 'required')">
+                            Esse campo é necessário
+                        </div>
+                        <div [hidden]="!getFieldErros('numero', 'maxlength')">
+                            É necessário que tenha no
+                            máximo {{getFieldErros('numero', 'maxlength')?.requiredLength}}
+                            caracteres
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <select formControlName="cidade" class="form-control"
+                            (change)="selectCidadeOnChange($event)"
+                            required>
+                        <option value="" disabled selected>Selecione a cidade</option>
+                        <option *ngFor="let cidade of listaCidadeConsulta"
+                                [value]="cidade.id">
+                            {{cidade.nome}}
+                        </option>
+                    </select>
+                    <!--                    <input type="text" class="form-control" formControlName="cidade"-->
+                    <!--                           placeholder="Cidade"-->
+                    <!--                           [ngClass]="[getField('cidade').invalid && (getField('cidade').dirty || getField('cidade').touched) ? 'is-invalid' : '']">-->
+                    <!--                    <div class=" mt-3 alert alert-danger"-->
+                    <!--                         *ngIf="getField('cidade').invalid && (getField('cidade').dirty || getField('cidade').touched)">-->
+                    <!--                        <div [hidden]="!getFieldErros('cidade', 'required')">-->
+                    <!--                            Esse campo é necessário-->
+                    <!--                        </div>-->
+                    <!--                        <div [hidden]="!getFieldErros('cidade', 'minlength')">-->
+                    <!--                            É necessário que tenha pelo-->
+                    <!--                            menos {{getFieldErros('cidade', 'minlength')?.requiredLength}}-->
+                    <!--                            caracteres-->
+                    <!--                        </div>-->
+                    <!--                        <div [hidden]="!getFieldErros('cidade', 'maxlength')">-->
+                    <!--                            É necessário que tenha no-->
+                    <!--                            máximo {{getFieldErros('cidade', 'maxlength')?.requiredLength}}-->
+                    <!--                            caracteres-->
+                    <!--                        </div>-->
+                    <!--                </div>-->
+                </div>
+
+                <div class="col-lg-4"
+                     (change)="selectBairroOnChange($event)"
+                     [hidden]="!form.controls.cidade.value">
+                    <select formControlName="bairro" class="form-control">
+                        <option value="" disabled selected>Selecione o bairro</option>
+                        <option
+                                *ngFor="let bairro of listaBairroConsulta"
+                                [value]="bairro.id">
+                            {{bairro.nome}}
+                        </option>
+                    </select>
+
+                    <!--                    <input type="text" class="form-control" formControlName="bairro"-->
+                    <!--                           placeholder="Bairro"-->
+                    <!--                           [ngClass]="[getField('bairro').invalid && (getField('bairro').dirty || getField('bairro').touched) ? 'is-invalid' : '']">-->
+                    <!--                    <div class=" mt-3 alert alert-danger"-->
+                    <!--                         *ngIf="getField('bairro').invalid && (getField('bairro').dirty || getField('bairro').touched)">-->
+                    <!--                        <div [hidden]="!getFieldErros('bairro', 'required')">-->
+                    <!--                            Esse campo é necessário-->
+                    <!--                        </div>-->
+                    <!--                        <div [hidden]="!getFieldErros('bairro', 'minlength')">-->
+                    <!--                            É necessário que tenha pelo-->
+                    <!--                            menos {{getFieldErros('bairro', 'minlength')?.requiredLength}}-->
+                    <!--                            caracteres-->
+                    <!--                        </div>-->
+                    <!--                        <div [hidden]="!getFieldErros('bairro', 'maxlength')">-->
+                    <!--                            É necessário que tenha no-->
+                    <!--                            máximo {{getFieldErros('bairro', 'maxlength')?.requiredLength}}-->
+                    <!--                            caracteres-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+                </div>
+
+                <div class="col-lg-2">
+                    <input type="text" class="form-control" formControlName="cep" placeholder="CEP"
+                           [ngClass]="[getField('cep').invalid && (getField('cep').dirty || getField('cep').touched) ? 'is-invalid' : '']">
+                    <div class=" mt-3 alert alert-danger"
+                         *ngIf="getField('cep').invalid && (getField('cep').dirty || getField('cep').touched)">
+                        <div [hidden]="!getFieldErros('cep', 'required')">
+                            Esse campo é necessário
+                        </div>
+                        <div [hidden]="!getFieldErros('cep', 'minlength')">
+                            É necessário que tenha pelo
+                            menos {{getFieldErros('cep', 'minlength')?.requiredLength}} caracteres
+                        </div>
+                        <div [hidden]="!getFieldErros('cep', 'maxlength')">
+                            É necessário que tenha no
+                            máximo {{getFieldErros('cep', 'maxlength')?.requiredLength}}
+                            caracteres
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-lg">
+                <textarea formControlName="descricao" cols="30" rows="8" class="form-control"
+                          placeholder="Descrição do fato ocorrido"
+                          [ngClass]="[getField('descricao').invalid && (getField('descricao').dirty || getField('descricao').touched) ? 'is-invalid' : '']"
+                >
+                </textarea>
+                    <div class=" mt-3 alert alert-danger"
+                         *ngIf="getField('descricao').invalid && (getField('descricao').dirty || getField('descricao').touched)">
+                        <div [hidden]="!getFieldErros('descricao', 'required')">
+                            Esse campo é necessário
+                        </div>
+                        <div [hidden]="!getFieldErros('descricao', 'minlength')">
+                            É necessário que tenha pelo
+                            menos {{getFieldErros('descricao', 'minlength')?.requiredLength}}
+                            caracteres
+                        </div>
+                        <div [hidden]="!getFieldErros('descricao', 'maxlength')">
+                            É necessário que tenha no
+                            máximo {{getFieldErros('descricao', 'maxlength')?.requiredLength}}
+                            caracteres
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- VITIMA -------------------------------->
+
+            <!-- VITIMA IDENTIFICADA?-->
+
+            <div class="row mt-5 mb-2">
+
+                <div class="col-12">
+                    <h6 class="font-weight-bold mb-3 border-top pt-4">VÍTIMAS</h6>
+                    <div class="topo-tabela pt-1" *ngIf="linhaTabelaVitimas">
+
+                        <button class="btn btn-warning mb-4" (click)="incluirNovaVitima()">Incluir
+                            nova vítima
+                        </button>
+                    </div>
+
+
+                    <div *ngIf="selecionarOpcaoID">
+                        <span>Vítima identificada?</span>
+
+                        <button class="btn ml-3 mr-4"
+                                [ngClass]="{'btn-success': vitimaIdentificada === true}"
+                                (click)="vitimaIdentificada=true; linhaTextAreaVitimas=true; ">
+                            Sim
+                        </button>
+
+                        <button class="btn"
+                                [ngClass]="{'btn-success': vitimaIdentificada === false}"
+                                (click)="vitimaIdentificada=false; linhaTextAreaVitimas=true; ">
+                            Não
+                        </button>
+
+                    </div>
+                    <div *ngIf="vitimaIncluida">
+                        <span class="font-weight-bold">Vitima incluída na lista</span>
+                    </div>
+
+
+                </div>
+            </div>
+
+            <!-- CASO IDENTIFICADA -->
+            <div class="row mb-3" *ngIf="vitimaIdentificada">
+                <div class="col-12">
+                    <label class="font-weight-bold">Consultar dados:</label>
+                    <div class="row mb-3">
+                        <div class="col-lg-4">
+                            <select formControlName="criterioBuscaVitima" class="form-control"
+                                    ng-model="string">
+                                <option value="" disabled selected>Critério da consulta</option>
+                                <option [value]="0">Nome</option>
+                                <option [value]="1">Nome da mãe</option>
+                                <option [value]="2">CPF</option>
+<!--                                <option [value]="3">Data de nascimento</option>-->
+                            </select>
+                        </div>
+                        <div class="col-lg-5">
+                            <input type="text"
+                                   formControlName="inputBuscaVitima"
+                                   placeholder="Parâmetro da consulta"
+                                   class="form-control">
+                        </div>
+                        <div class="col-lg-3">
+                            <button class="btn btn-primary botao-busca"
+                                    [disabled]="!form.controls.inputBuscaVitima.value"
+                                    (click)="realizaBuscaVitima(resultadoDaConsulta)">Pesquisar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- INPUTS COM DADOS TRAZIDOS-->
+            <div class="row mb-3" *ngIf="buscaVitima">
+                <div class="col-12 mt-2">
+                    <span class="font-weight-bold">Resultado da consulta:</span>
+                </div>
+
+                <div class="col-4 mt-3">
+                    <label>Nome</label>
+                    <input type="text" class="form-control" formControlName="nomeBuscaVitima"
+                           value="nome">
+                </div>
+
+                <div class="col-4 mt-3">
+                    <label>CPF</label>
+                    <input type="text" class="form-control" value="cpf"
+                           formControlName="cpfBuscaVitima">
+                </div>
+                <div class="col-4 mt-3">
+                    <label>Nome da mãe</label>
+                    <input type="text" class="form-control" value="nome da mae"
+                           formControlName="nomeMaeBuscaVitima">
+                </div>
+                <div class="col-3 mt-3">
+                    <label>E-mail</label>
+                    <input type="text" class="form-control" value="email"
+                           formControlName="emailBuscaVitima">
+                </div>
+                <div class="col-3 mt-3">
+                    <label>Telefones</label>
+                    <input type="text" class="form-control" value="telefone"
+                           formControlName="telefoneBuscaVitima">
+                </div>
+
+
+            </div>
+
+            <div class="row mb-3" *ngIf="linhaTextAreaVitimas">
+
+                <div class="col-12 textAreaVitima">
+
+        <textarea formControlName="textAreaBuscaVitima"
+                  cols="30"
+                  rows="8"
+                  class="form-control"
+                  placeholder="Características da vítima"
+        >
+        </textarea>
+
+
+                </div>
+                <div class="col-12">
+                    <button class="btn btn-success mt-3 mb-4"
+                            [disabled]="!form.controls.textAreaBuscaVitima.value || (!vitimaSelecionada
+                   && vitimaIdentificada)"
+                            (click)="adicionarNaListaDeVitimas()">
+                        Adicionar à lista de vitimas
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- LISTA DE VITIMAS -->
+
+
+            <div *ngIf="linhaTabelaVitimas" class="border-top mt-3">
+                <table class="table table-striped table-responsive table-borderless mt-3 linhaTabelaVitimas">
+                    <thead>
+                    <tr>
+                        <th scope="col">Vitima Identificada</th>
+                        <th scope="col">Nome</th>
+                        <th scope="col">CPF</th>
+                        <th scope="col">Data de nascimento</th>
+                        <th scope="col">Características</th>
+                        <th scope="col">Ações</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let obj of listaVitimas">
+                        <td>{{obj.identificada}}</td>
+                        <td>{{obj.pessoa.nome}}</td>
+                        <td>{{obj.pessoa.cpf}}</td>
+                        <td>{{obj.pessoa.dataNascimento}}</td>
+                        <td>{{obj.caracteristicas}}</td>
+                        <td>
+                            <button type="button"
+                                    class="btn btn-warning mr-0"
+                                    (click)="removerPessoa(obj, listaVitimas, 'vitima')">
+                                Excluir
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+
+            <!---------------------------------------------------------------------------------------
+            ----------------------------------------  SUSPEITO  -------------------------------------
+            ---------------------------------------------------------------------------------------->
+
+
+            <div class="row mt-5 mb-2">
+
+                <div class="col-12">
+                    <h6 class="font-weight-bold mb-3 border-top pt-4">SUSPEITOS</h6>
+                    <div class="topo-tabela pt-1" *ngIf="linhaTabelaSuspeitos">
+
+                        <button class="btn btn-warning mb-4" (click)="incluirNovoSuspeito()">Incluir
+                            novo
+                            suspeito
+                        </button>
+                    </div>
+
+                    <div *ngIf="selecionarOpcaoIDSuspeito">
+                        <span>Suspeito identificado?</span>
+
+                        <button class="btn ml-3 mr-4"
+                                [ngClass]="{'btn-success': suspeitoIdentificado === true}"
+                                (click)="suspeitoIdentificado=true; linhaTextAreaSuspeitos=true; ">
+                            Sim
+                        </button>
+
+                        <button class="btn"
+                                [ngClass]="{'btn-success': suspeitoIdentificado === false}"
+                                (click)="suspeitoIdentificado=false; linhaTextAreaSuspeitos=true; ">
+                            Não
+                        </button>
+                    </div>
+                    <div *ngIf="suspeitoIncluido">
+                        <span class="font-weight-bold">Suspeito incluído na lista</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- CASO IDENTIFICADO -->
+            <div class="row mb-3" *ngIf="suspeitoIdentificado">
+                <div class="col-12">
+                    <label class="font-weight-bold">Consultar dados:</label>
+
+                    <div class="row mb-3">
+
+                        <div class="col-lg-4">
+
+                            <select formControlName="criterioBuscaSuspeito" class="form-control">
+                                <option value="" disabled selected>Critério da consulta</option>
+                                <option [value]="0">Nome</option>
+                                <option [value]="1">Nome da mãe</option>
+                                <option [value]="2">CPF</option>
+<!--                                <option [value]="3">Data de Nascimento</option>-->
+                            </select>
+                        </div>
+                        <div class="col-lg-5">
+                            <input type="text" class="form-control"
+                                   placeholder="Parâmetro da consulta"
+                                   formControlName="inputBuscaSuspeito">
+                        </div>
+                        <div class="col-lg-3">
+                            <button class="btn btn-primary botao-busca"
+                                    [disabled]="!(form.controls.inputBuscaSuspeito.value)"
+                                    (click)="realizaBuscaSuspeito(resultadoDaConsulta)">
+                                Pesquisar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- INPUTS COM DADOS TRAZIDOS-->
+            <div class="row mb-3" *ngIf="buscaSuspeito">
+
+                <div class="col-12 mt-2">
+                    <span class="font-weight-bold">Resultado</span>
+                </div>
+
+                <div class="col-4 mt-3">
+                    <input type="text" class="form-control" formControlName="nomeBuscaSuspeito">
+                </div>
+
+                <div class="col-4 mt-3">
+                    <input type="text" class="form-control" value="cpf"
+                           formControlName="cpfBuscaSuspeito">
+                </div>
+                <div class="col-4 mt-3">
+                    <input type="text" class="form-control" value="nome da mae"
+                           formControlName="nomeMaeBuscaSuspeito">
+                </div>
+                <div class="col-3 mt-3">
+                    <input type="text" class="form-control" value="email"
+                           formControlName="emailBuscaSuspeito">
+                </div>
+                <div class="col-3 mt-3">
+                    <input type="text" class="form-control" value="telefone"
+                           formControlName="telefoneBuscaSuspeito">
+                </div>
+
+            </div>
+
+            <div class="row mb-3" *ngIf="linhaTextAreaSuspeitos">
+
+                <div class="col-12">
+
+                <textarea formControlName="textAreaBuscaSuspeito" cols="30" rows="8"
+                          class="form-control"
+                          placeholder="Características do suspeito"></textarea>
+
+
+                </div>
+                <div class="col-12">
+                    <button class="btn btn-success mt-3 mb-4"
+                            [disabled]="!form.controls.textAreaBuscaSuspeito.value || (!suspeitoSelecionado
+                   && suspeitoIdentificado)"
+                            (click)="adicionarNaListaSuspeito()">
+                        Adicionar à lista de suspeitos
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- LISTA DE SUSPEITOS -->
+
+
+            <div *ngIf="linhaTabelaSuspeitos" class="border-top mt-3">
+
+                <table class="table table-striped table-borderless mt-3">
+                    <thead>
+                    <tr>
+                        <th scope="col">Suspeito Identificado</th>
+                        <th scope="col">Nome</th>
+                        <th scope="col">CPF</th>
+                        <th scope="col">Data de nascimento</th>
+                        <th scope="col">Características</th>
+                        <th scope="col">Ações</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let obj of listaSuspeitos">
+                        <td>{{obj.identificada}}</td>
+                        <td>{{obj.pessoa.nome}}</td>
+                        <td>{{obj.pessoa.cpf}}</td>
+                        <td>{{obj.pessoa.dataNascimento}}</td>
+                        <td>{{obj.caracteristicas}}</td>
+                        <td>
+                            <button type="button" class="btn btn-warning mr-0"
+                                    (click)="removerPessoa(obj, listaSuspeitos,'suspeito')">Excluir
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="row mt-5 mb-2">
+
+                <div class="col-12">
+                    <h6 class="font-weight-bold mb-3 border-top pt-4">EVIDÊNCIA</h6>
+                    <div class="topo-tabela pt-1">
+                        <input type="file" class="file-input" accept="image/png" formControlName="evidencia" (change)="onFileChange($event)">
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="mt-3 ml-1">
+                <input class="form-check-input" type="checkbox" value="" 
+                       formControlName="compensacao">
+                <label class="form-check-label" for="flexCheckDefault">
+                  Compensação de Tarefas
+                </label>
+            </div>
+
+            <button class="btn btn-info mt-4" name="enviarDados" (click)="enviarDados()"
+                    [disabled]="!form.valid || listaSuspeitos.length == 0 || listaVitimas.length == 0">
+                Enviar dados
+            </button>
+        </form>
+
+    </div>
+</div>
+
+<ng-template #resultadoDaConsulta>
+
+
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Resultado da consulta</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <table class="table table-striped table-borderless">
+                <thead>
+                <tr class="table-info">
+                    <th scope="col">Nome</th>
+                    <th scope="col">Nome da Mãe</th>
+                    <th scope="col">CPF</th>
+                    <th scope="col">Data de Nascimento</th>
+                    <th scope="col">Telefones</th>
+                    <th scope="col">Ação</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let pessoa of listaPessoaConsulta|paginate: {
+                id: 'foo',
+                itemsPerPage: 5,
+                currentPage: paginaAtual,
+                totalItems: totalRegistros
+                }">
+                    <td>{{pessoa.nome}}</td>
+                    <td>{{pessoa.nomeMae}}</td>
+                    <td>{{pessoa.cpf}}</td>
+                    <td>{{pessoa.dataNascimento}}</td>
+                    <td>{{pessoa.telefones}}</td>
+                    <td>
+                        <button type="button" class="btn btn-warning mr-0"
+                                (click)="selecionarPessoa(pessoa)">Selecionar
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <pagination-controls id="foo"
+                                 (pageChange)="pageOnChange(template=resultadoDaConsulta, $event)"
+                                 maxSize="10" previousLabel="Anterior"
+                                 nextLabel="Próximo">
+            </pagination-controls>
+        </div>
+    </div>
+
+</ng-template>
+
+
+<ng-template #nenhumResultadoObtido>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Resultado da consulta</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        Não foi obtido nenhum resultado para essa consulta.
+    </div>
+</ng-template>

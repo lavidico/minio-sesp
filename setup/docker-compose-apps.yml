@@ -1,0 +1,58 @@
+version: '3.8'
+services:
+  carteira-funcional: 
+    image: br.gov.mt.sesp/carteira-funcional
+    container_name: carteira-funcional
+    ports:
+      - '8001:8080'
+    restart: always
+    networks:
+      - sesp-microsservicos
+  gerenciamento-ocorrencia: 
+    image: br.gov.mt.sesp/gerenciamento-ocorrencia
+    container_name: gerenciamento-ocorrencia
+    ports:
+      - '8002:8080'
+    restart: always
+    networks:
+      - sesp-microsservicos
+  gerenciamento-patrulha: 
+    image: br.gov.mt.sesp/gerenciamento-patrulha
+    container_name: gerenciamento-patrulha
+    ports:
+      - '8003:8080'
+    restart: always
+    networks:
+      - sesp-microsservicos
+  gerenciamento-procurado: 
+    image: br.gov.mt.sesp/gerenciamento-procurado
+    container_name: gerenciamento-procurado
+    ports:
+      - '8004:8080'
+    restart: always
+    networks:
+      - sesp-microsservicos
+  registro-geral: 
+    image: br.gov.mt.sesp/registro-geral
+    container_name: registro-geral
+    ports:
+      - '8005:8080'
+    restart: always
+    networks:
+      - sesp-microsservicos
+  gerenciamento-roubo:
+    image: br.gov.mt.sesp/gerenciamento-roubo-web
+    container_name: gerenciamento-roubo-web
+    ports:
+      - '8006:8080'
+    restart: always
+    networks:
+      - sesp-microsservicos
+    depends_on:
+      - gerenciamento-ocorrencia
+      - gerenciamento-procurado
+      - registro-geral
+      
+networks:
+  sesp-microsservicos:
+    external: true
